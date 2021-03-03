@@ -1,0 +1,592 @@
+/*# Maze styles */
+
+.row {
+  height: 50px;
+}
+
+.col {
+  width: 50px !important;
+  -ms-user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  -khtml-user-select: none;
+  user-select: none;
+}
+.col:hover {
+  /* background-color: rgba(187, 49, 52, 0.75); */
+  background-color: #4d4e4e;
+  color: #a4c0a4;
+}
+
+.start {
+  background-color: #0b515c;
+}
+.finish {
+  background-color: darkgreen;
+}
+.obstacle {
+  background-color: #5d1d1f;
+}
+.visited {
+  background-color: chartreuse;
+  color: rgba(51, 51, 51);
+}
+.final {
+  background-color: #1e9db1;
+  color: rgba(51, 51, 51);
+}
+
+/* ----------------------------------------------------------- */
+
+.flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  flex-flow: row;
+  flex-basis: content;
+}
+
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  flex-flow: row;
+  flex-basis: content;
+}
+
+.flex-around {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  flex-flow: row;
+  flex-basis: content;
+}
+
+.flex-inline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  flex-flow: row;
+  flex-basis: content;
+}
+
+.flex-start {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  flex-flow: row;
+  flex-basis: content;
+}
+
+.flex-end {
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  flex-flow: row;
+  flex-basis: content;
+}
+
+.flex-center-start {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  flex-flow: row;
+  flex-basis: content;
+}
+
+.flex-start-center {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  flex-wrap: wrap;
+  flex-flow: row;
+  flex-basis: content;
+}
+
+.flex-center-end {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  flex-flow: row;
+  flex-basis: content;
+}
+
+.flex-end-center {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  flex-wrap: wrap;
+  flex-flow: row;
+  flex-basis: content;
+}
+
+body {
+  background-color: #121212;
+  color: #a4c0a4;
+}
+
+.bg-light {
+  background-color: red;
+}
+
+.c1 {
+  color: rgba(51, 51, 51, 0.25);
+}
+
+.c2 {
+  color: #bb3134;
+}
+
+.c3 {
+  color: #ff9f39;
+}
+
+.c4 {
+  color: #808080;
+}
+
+.b1 {
+  background-color: rgba(51, 51, 51, 0.25);
+}
+
+.b2 {
+  background-color: rgba(187, 49, 52, 0.75);
+}
+
+.b3 {
+  background-color: rgba(255, 159, 57, 0.75);
+}
+
+.b4 {
+  background-color: rgba(128, 128, 128, 0.75);
+}
+
+.c__def {
+  color: #c0c0c0;
+}
+
+.c__def-light {
+  color: #f5f5f5;
+}
+
+.c__def-muted {
+  color: #808080;
+}
+
+.b__def {
+  border-color: #d0d0d0;
+}
+
+.b__def-light {
+  border-color: #f0f0f0;
+}
+
+.b__def-muted {
+  color: #808080;
+}
+
+.bg__def {
+  background-color: #d0d0d0;
+}
+
+.bg__def-light {
+  background-color: #f0f0f0;
+}
+
+.bg__def-muted {
+  color: #808080;
+}
+
+.c__error {
+  color: #9b3134;
+}
+
+.c__error-light {
+  color: #b96e70;
+}
+
+.c__error-muted {
+  color: #5d1d1f;
+}
+
+.b__error {
+  border-color: #9b3134;
+}
+
+.b__error-light {
+  border-color: #b96e70;
+}
+
+.b__error-muted {
+  color: #5d1d1f;
+}
+
+.bg__error {
+  background-color: #9b3134;
+}
+
+.bg__error-light {
+  background-color: #b96e70;
+}
+
+.bg__error-muted {
+  color: #5d1d1f;
+}
+
+.c__success {
+  color: #31bb34;
+}
+
+.c__success-light {
+  color: #98dd99;
+}
+
+.c__success-muted {
+  color: #185d1a;
+}
+
+.b__success {
+  border-color: #31bb34;
+}
+
+.b__success-light {
+  border-color: #98dd99;
+}
+
+.b__success-muted {
+  color: #185d1a;
+}
+
+.bg__success {
+  background-color: #31bb34;
+}
+
+.bg__success-light {
+  background-color: #98dd99;
+}
+
+.bg__success-muted {
+  color: #185d1a;
+}
+
+.c__primary {
+  color: #4861aa;
+}
+
+.c__primary-light {
+  color: #6587ed;
+}
+
+.c__primary-muted {
+  color: #2b3a66;
+}
+
+.b__primary {
+  border-color: #4861aa;
+}
+
+.b__primary-light {
+  border-color: #6587ed;
+}
+
+.b__primary-muted {
+  color: #2b3a66;
+}
+
+.bg__primary {
+  background-color: #4861aa;
+}
+
+.bg__primary-light {
+  background-color: #6587ed;
+}
+
+.bg__primary-muted {
+  color: #2b3a66;
+}
+
+.c__muted {
+  color: #636465;
+}
+
+.c__muted-light {
+  color: #b2b2b2;
+}
+
+.c__muted-muted {
+  color: #333435;
+}
+
+.b__muted {
+  border-color: #636465;
+}
+
+.b__muted-light {
+  border-color: #b2b2b2;
+}
+
+.b__muted-muted {
+  color: #333435;
+}
+
+.bg__muted {
+  background-color: #636465;
+}
+
+.bg__muted-light {
+  background-color: #b2b2b2;
+}
+
+.bg__muted-muted {
+  color: #333435;
+}
+
+.c__warning {
+  color: #c35e26;
+}
+
+.c__warning-light {
+  color: #d58e67;
+}
+
+.c__warning-muted {
+  color: #753816;
+}
+
+.b__warning {
+  border-color: #c35e26;
+}
+
+.b__warning-light {
+  border-color: #d58e67;
+}
+
+.b__warning-muted {
+  color: #753816;
+}
+
+.bg__warning {
+  background-color: #c35e26;
+}
+
+.bg__warning-light {
+  background-color: #d58e67;
+}
+
+.bg__warning-muted {
+  color: #753816;
+}
+
+.c__info {
+  color: #17a2b8;
+}
+
+.c__info-light {
+  color: #8bd0db;
+}
+
+.c__info-muted {
+  color: #0b515c;
+}
+
+.b__info {
+  border-color: #17a2b8;
+}
+
+.b__info-light {
+  border-color: #8bd0db;
+}
+
+.b__info-muted {
+  color: #0b515c;
+}
+
+.bg__info {
+  background-color: #17a2b8;
+}
+
+.bg__info-light {
+  background-color: #8bd0db;
+}
+
+.bg__info-muted {
+  color: #0b515c;
+}
+
+.c__secondary {
+  color: #4861aa;
+}
+
+.c__secondary-light {
+  color: #6587ed;
+}
+
+.c__secondary-muted {
+  color: #2b3a66;
+}
+
+.b__secondary {
+  border-color: #4861aa;
+}
+
+.b__secondary-light {
+  border-color: #6587ed;
+}
+
+.b__secondary-muted {
+  color: #2b3a66;
+}
+
+.bg__secondary {
+  background-color: #4861aa;
+}
+
+.bg__secondary-light {
+  background-color: #6587ed;
+}
+
+.bg__secondary-muted {
+  color: #2b3a66;
+}
+
+.c__light {
+  color: #d9d9d9;
+}
+
+.c__light-light {
+  color: #ffffff;
+}
+
+.c__light-muted {
+  color: #c0c0c0;
+}
+
+.b__light {
+  border-color: #d9d9d9;
+}
+
+.b__light-light {
+  border-color: #ffffff;
+}
+
+.b__light-muted {
+  color: #c0c0c0;
+}
+
+.bg__light {
+  background-color: #d9d9d9;
+}
+
+.bg__light-light {
+  background-color: #ffffff;
+}
+
+.bg__light-muted {
+  color: #c0c0c0;
+}
+
+a {
+  color: #ffffff;
+  transition: 0.25s;
+  border-bottom: 3.5px solid transparent;
+}
+a:hover {
+  color: #f0f0f0;
+  border-color: rgba(255, 159, 57, 0.45);
+}
+a:focus {
+  color: #ffffff;
+  border-color: #ff9f39;
+}
+
+.dot {
+  height: 15px;
+  width: 15px;
+  background-color: #bbb;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.not-found {
+  width: 100vw;
+  height: 100vh;
+  background-clip: content-box;
+  background-attachment: fixed;
+  background-origin: content-box;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+#login.jumbotron {
+  background-color: inherit;
+  margin-bottom: 0;
+}
+#login.jumbotron .pass-show {
+  cursor: pointer;
+  color: #a0a0a0;
+  transition: 0.2s;
+}
+#login.jumbotron .pass-show:hover {
+  color: #ff9f39;
+}
+#login.jumbotron .switch {
+  position: absolute;
+  left: 0;
+  bottom: -20px;
+  width: 100%;
+  height: 40px;
+}
+#login.jumbotron .switch i {
+  background-color: #121212;
+  border: 15px solid #121212;
+  border-radius: 50%;
+  color: #636465;
+  cursor: pointer;
+  transition: 0.25s;
+}
+#login.jumbotron .switch i:hover {
+  color: #b2b2b2;
+}
+#login.jumbotron .switch i:active {
+  color: #ffffff;
+}
+
+.custom-alert-danger {
+  background-color: #9b3134;
+  color: #b2b2b2;
+}
+
+.custom-alert-success {
+  background-color: #31bb34;
+  color: #b2b2b2;
+}
+
+.grid {
+  display: grid;
+  grid-gap: 10px;
+}
+
+.grid--fill {
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+}
+
+.grid--fit {
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+}
+
+.grid--element {
+  width: 100%;
+  height: 100%;
+}
+
+/*# sourceMappingURL=main.css.map */
