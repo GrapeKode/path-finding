@@ -1,5 +1,7 @@
 import React, { Component, Fragment } from "react"
 import { FinalPath, MazeStatus, Position, VisitedPosition } from "./types"
+// import { MazeGenerator } from "../common/generate-maze"
+import generate from "../common/test-gen-maze"
 
 export interface MazeState {
   mazeStatus: MazeStatus
@@ -10,6 +12,7 @@ export interface MazeState {
   visitedPos: VisitedPosition[]
   closedPos: Position[]
   finalPath: FinalPath[]
+  speed: number
 }
 
 export class Maze extends Component<{}, MazeState> {
@@ -17,7 +20,8 @@ export class Maze extends Component<{}, MazeState> {
 
   state: MazeState = {
     mazeStatus: MazeStatus.SelectStartPosition,
-    mazeSize: 10,
+    mazeSize: 16,
+    speed: 80,
     startPos: {
       row: 7,
       col: 7,
@@ -33,14 +37,50 @@ export class Maze extends Component<{}, MazeState> {
   }
 
   componentDidMount() {
+    // Lib
+    const gen = generate(this.state.mazeSize)
+    console.log(gen)
+    // const matrix = gen.map((row: any) => row.map((el: any) => ([el.top, el.bottom, el.left, el.right].filter((el) => !el).length > 1 ? 0 : 1)))
+    const matrix = gen.map((row) => row.map((el: any) => ([el.top, el.bottom, el.left, el.right].filter((el) => !el).length > 1 ? [0, 0] : [el.x, el.y])))
+    console.log(matrix)
+
+    // console.log(gen.map((row) => row.map((el: any) => ((el.top || el.right) && (el.left || el.bottom) ? [el.x, el.y] : [0, 0]))))
+
+    const newObs = []
+
+    for (let i = 0; i < matrix.length; i++) {
+      for (let j = 0; j < matrix[i].length; j++) {
+        if (matrix[i][j][0] !== 0 && matrix[i][j][1] !== 0) {
+          newObs.push({ row: matrix[i][j][0], col: matrix[i][j][1] })
+        }
+      }
+    }
+
+    this.setState({ obstaclesPos: newObs })
+
     this.setSavedObstacles()
+
+    // Converted Java
+    // const maze = new MazeGenerator(4)
+    // maze.generateMaze()
+    // console.log(maze.getMaze())
   }
+
+  generateMaze() {}
 
   setSavedObstacles() {
     const newObstacles = localStorage.getItem("obstacles")
+    const newStartFinishPos = localStorage.getItem("startFinishPos")
 
     if (newObstacles) {
-      this.setState((prev: MazeState) => ({ ...prev, obstaclesPos: JSON.parse(newObstacles) }))
+      this.setState((prev: MazeState) => ({
+        ...prev,
+        obstaclesPos: JSON.parse(newObstacles),
+      }))
+    }
+    if (newStartFinishPos) {
+      const parsedStartFinishPos = JSON.parse(newStartFinishPos) as { startPos: Position; finishPos: Position }
+      this.setState({ startPos: parsedStartFinishPos.startPos, finishPos: parsedStartFinishPos.finishPos })
     }
   }
 
@@ -100,7 +140,7 @@ export class Maze extends Component<{}, MazeState> {
 
   findPath() {
     const nextNode = this.getMostRelevantPosition()
-    console.log("Next Node >>>", `[${nextNode.position.row}, ${nextNode.position.col}] > ${nextNode.startDist} ${nextNode.finishDist}`)
+    // console.log("Next Node >>>", `[${nextNode.position.row}, ${nextNode.position.col}] > ${nextNode.startDist} ${nextNode.finishDist}`)
     this.addClosedCell(nextNode.position.row, nextNode.position.col)
     this.explore(nextNode.position.row, nextNode.position.col)
   }
@@ -127,13 +167,14 @@ export class Maze extends Component<{}, MazeState> {
       if (this.isClosedCell(visited.position.row, visited.position.col)) {
         const totalDistance = this.getTotalDistance(visited)
 
-        console.log({ ...visited, position: [visited.position.row, visited.position.col].toString() }, totalDistance)
-        console.log(prevVisitedNode.position.row - visited.position.row, prevVisitedNode.position.col - visited.position.col)
+        // console.log({ ...visited, position: [visited.position.row, visited.position.col].toString() }, totalDistance)
+        // console.log(prevVisitedNode.position.row - visited.position.row, prevVisitedNode.position.col - visited.position.col)
 
         if (
           visited.finishDist <= totalDistance &&
           [0, 1].includes(Math.abs(prevVisitedNode.position.row - visited.position.row)) &&
-          [0, 1].includes(Math.abs(prevVisitedNode.position.col - visited.position.col))
+          [0, 1].includes(Math.abs(prevVisitedNode.position.col - visited.position.col)) &&
+          Math.abs(prevVisitedNode.finishDist - visited.finishDist) === 10
           // !newFinalPath.some((el, index) => el.finishDist === visited.finishDist && el.startDist === visited.startDist && el.totalDistance === totalDistance)
         ) {
           newFinalPath.push({ ...visited, totalDistance })
@@ -209,7 +250,7 @@ export class Maze extends Component<{}, MazeState> {
       alert("Select End position.")
     }
     // Add End Position
-    if (mazeStatus === MazeStatus.SelectEndPosition || mazeStatus === MazeStatus.ResetPositions) {
+    if (mazeStatus === MazeStatus.SelectEndPosition) {
       this.setState({ finishPos: { row: rowIndex, col: cellIndex }, mazeStatus: MazeStatus.PositionsSelected })
       alert("NOTE: Add obstacle by clicking the cells.")
     }
@@ -220,13 +261,13 @@ export class Maze extends Component<{}, MazeState> {
     this.explore(this.state.startPos.row, this.state.startPos.col)
     this.timer = setInterval(() => {
       this.findPath()
-      // console.log(this.state)
-    }, 150)
+    }, this.state.speed)
   }
   save() {
-    const { obstaclesPos } = this.state
+    const { obstaclesPos, startPos, finishPos } = this.state
     if (obstaclesPos) {
       localStorage.setItem("obstacles", JSON.stringify(obstaclesPos))
+      localStorage.setItem("startFinishPos", JSON.stringify({ startPos, finishPos }))
     }
   }
   stop() {
@@ -242,6 +283,8 @@ export class Maze extends Component<{}, MazeState> {
       finalPath: [],
     })
   }
+
+  generate() {}
 
   resetAll() {
     this.reset()
@@ -282,6 +325,7 @@ export class Maze extends Component<{}, MazeState> {
   // View
 
   createCells(rowIndex: number, cellsNo: number) {
+    const { visitedPos } = this.state
     const cells = []
     for (let i = 0; i < cellsNo; i++) {
       const start = this.isStartPosition(rowIndex, i) && "start"
@@ -296,7 +340,10 @@ export class Maze extends Component<{}, MazeState> {
           style={{ border: ".5px solid black" }}
           onClick={() => (this.state.mazeStatus === MazeStatus.PositionsSelected ? this.addObstacles(rowIndex, i) : this.addStartEndPositions(rowIndex, i))}
         >
-          {`${rowIndex} ${i}`}
+          {/* {`${rowIndex} ${i}`} */}
+
+          {finish ? "F" : start ? "S" : ""}
+          {visited ? visitedPos.find((pos) => pos.position.row === rowIndex && pos.position.col === i)?.finishDist : obstacle ? "#" : ""}
         </div>
       )
     }
@@ -308,7 +355,7 @@ export class Maze extends Component<{}, MazeState> {
     const rows = []
     for (let i = 0; i < size; i++) {
       rows.push(
-        <div className="row" style={{ minHeight: size * size + "px" }}>
+        <div className="row" style={{ minHeight: size + "px" }}>
           {this.createCells(i, size)}
         </div>
       )
@@ -321,7 +368,7 @@ export class Maze extends Component<{}, MazeState> {
     return (
       <Fragment>
         <div id="Maze" className="container" style={{ border: "1px solid black" }}>
-          {this.createRows(10)}
+          {this.createRows(this.state.mazeSize)}
         </div>
         <div className="container mt-3">
           <div className="row">

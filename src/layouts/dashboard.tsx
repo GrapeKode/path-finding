@@ -7,7 +7,7 @@ class Dashboard extends Component {
   render() {
     return (
       <div className="jumbotron">
-        <div className="container">
+        <div className="container-fluid">
           <div className="h1">Maze v1.0.0</div>
           <hr />
           <Maze />
