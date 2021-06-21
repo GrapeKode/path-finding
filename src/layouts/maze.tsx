@@ -21,7 +21,7 @@ export class Maze extends Component<{}, MazeState> {
   state: MazeState = {
     mazeStatus: MazeStatus.SelectStartPosition,
     mazeSize: 16,
-    speed: 80,
+    speed: 0,
     startPos: {
       row: 7,
       col: 7,
@@ -160,26 +160,26 @@ export class Maze extends Component<{}, MazeState> {
           col: finishPos.col,
         },
         finishDist: 0,
-        startDist: (Math.abs(finishPos.row - startPos.row) + Math.abs(finishPos.col - startPos.col)) * 10,
+        startDist: this.getDistance(finishPos.row, finishPos.col, startPos),
         totalDistance: (Math.abs(finishPos.row - startPos.row) + Math.abs(finishPos.col - startPos.col)) * 10,
       }
 
-      if (this.isClosedCell(visited.position.row, visited.position.col)) {
-        const totalDistance = this.getTotalDistance(visited)
+      // if (this.isClosedCell(visited.position.row, visited.position.col)) {
+      const totalDistance = this.getTotalDistance(visited)
 
-        // console.log({ ...visited, position: [visited.position.row, visited.position.col].toString() }, totalDistance)
-        // console.log(prevVisitedNode.position.row - visited.position.row, prevVisitedNode.position.col - visited.position.col)
+      // console.log({ ...visited, position: [visited.position.row, visited.position.col].toString() }, totalDistance)
+      // console.log(prevVisitedNode.position.row - visited.position.row, prevVisitedNode.position.col - visited.position.col)
 
-        if (
-          visited.finishDist <= totalDistance &&
-          [0, 1].includes(Math.abs(prevVisitedNode.position.row - visited.position.row)) &&
-          [0, 1].includes(Math.abs(prevVisitedNode.position.col - visited.position.col)) &&
-          Math.abs(prevVisitedNode.finishDist - visited.finishDist) === 10
-          // !newFinalPath.some((el, index) => el.finishDist === visited.finishDist && el.startDist === visited.startDist && el.totalDistance === totalDistance)
-        ) {
-          newFinalPath.push({ ...visited, totalDistance })
-        }
+      if (
+        [0, 1].includes(Math.abs(prevVisitedNode.position.row - visited.position.row)) &&
+        [0, 1].includes(Math.abs(prevVisitedNode.position.col - visited.position.col)) &&
+        Math.abs(prevVisitedNode.startDist - visited.startDist) === 10
+        // prevVisitedNode.startDist > visited.startDist
+        // !newFinalPath.some((el, index) => el.finishDist === visited.finishDist && el.startDist === visited.startDist && el.totalDistance === totalDistance)
+      ) {
+        newFinalPath.push({ ...visited, totalDistance })
       }
+      // }
     }
 
     this.setState(
@@ -189,6 +189,7 @@ export class Maze extends Component<{}, MazeState> {
       () => {
         console.log("FINAL >>>", this.state)
         console.warn(`Steps: ${this.state.finalPath.length + 1}`)
+        alert(`Congrats!!!\n\nSteps: ${this.state.finalPath.length + 1}`)
       }
     )
   }
@@ -254,6 +255,10 @@ export class Maze extends Component<{}, MazeState> {
       this.setState({ finishPos: { row: rowIndex, col: cellIndex }, mazeStatus: MazeStatus.PositionsSelected })
       alert("NOTE: Add obstacle by clicking the cells.")
     }
+  }
+
+  getDistance(rowIndex: number, cellIndex: number, pointPos: Position) {
+    return (Math.abs(rowIndex - pointPos.row) + Math.abs(cellIndex - pointPos.col)) * 10
   }
 
   // Controllers
@@ -333,17 +338,25 @@ export class Maze extends Component<{}, MazeState> {
       const obstacle = this.isObstacle(rowIndex, i) && "obstacle"
       const visited = this.isVisitedCell(rowIndex, i) && "visited"
       const final = this.isFinalPath(rowIndex, i) && "final"
+      const isComplete = this.state.finalPath.length > 0
+      const currentCell = visitedPos.find((pos) => pos.position.row === rowIndex && pos.position.col === i)
 
       cells.push(
         <div
           className={`col flex-center ${start} ${finish} ${obstacle} ${final ? final : visited}`}
           style={{ border: ".5px solid black" }}
-          onClick={() => (this.state.mazeStatus === MazeStatus.PositionsSelected ? this.addObstacles(rowIndex, i) : this.addStartEndPositions(rowIndex, i))}
+          onClick={() =>
+            isComplete
+              ? console.log({ ...currentCell, position: JSON.stringify(currentCell?.position), totalDistance: this.getTotalDistance(currentCell as any) })
+              : this.state.mazeStatus === MazeStatus.PositionsSelected
+              ? this.addObstacles(rowIndex, i)
+              : this.addStartEndPositions(rowIndex, i)
+          }
         >
           {/* {`${rowIndex} ${i}`} */}
 
           {finish ? "F" : start ? "S" : ""}
-          {visited ? visitedPos.find((pos) => pos.position.row === rowIndex && pos.position.col === i)?.finishDist : obstacle ? "#" : ""}
+          {visited ? currentCell?.finishDist : obstacle ? "#" : ""}
         </div>
       )
     }
