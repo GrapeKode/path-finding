@@ -21,7 +21,7 @@ export class Maze extends Component<{}, MazeState> {
   state: MazeState = {
     mazeStatus: MazeStatus.SelectStartPosition,
     mazeSize: 16,
-    speed: 0,
+    speed: 100,
     startPos: {
       row: 7,
       col: 7,
